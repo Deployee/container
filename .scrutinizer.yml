@@ -8,3 +8,7 @@ build:
                         coverage:
                             file: 'clover-file'
                             format: 'clover'
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
