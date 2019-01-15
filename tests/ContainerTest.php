@@ -26,6 +26,13 @@ class ContainerTest extends TestCase
         $container->set('foo', 2);
     }
 
+    public function testGetFail()
+    {
+        $container = new Container();
+        $this->expectException(ContainerException::class);
+        $container->get('foo');
+    }
+
     public function testExtend()
     {
         $container = new Container(['foo' => 1, 'addtofoo' => 5]);

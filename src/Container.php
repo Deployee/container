@@ -24,9 +24,14 @@ class Container implements ContainerInterface
     /**
      * @param string $id
      * @return mixed
+     * @throws ContainerException
      */
     public function get(string $id)
     {
+        if(!isset($this->container[$id])){
+            throw new ContainerException(sprintf('Unknown identifier %s', $id));
+        }
+
         return $this->container[$id];
     }
 
