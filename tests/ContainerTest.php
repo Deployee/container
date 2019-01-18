@@ -35,11 +35,31 @@ class ContainerTest extends TestCase
 
     public function testExtend()
     {
-        $container = new Container(['foo' => 1, 'addtofoo' => 5]);
-        $container->extend('foo', function($value, ContainerInterface $c){
-            return $value + $c->get('addtofoo');
+        $object = new \stdClass();
+        $object->bar = 1;
+
+        $container = new Container(['foo' => $object, 'addtofoo' => 5]);
+        $container->extend('foo', function(\stdClass $foo, ContainerInterface $c){
+            return $foo->bar + $c->get('addtofoo');
         });
 
-        $this->assertSame(6, $container->get('foo'));
+        $extended = $container->get('foo');
+        $this->assertSame(6, $extended);
+    }
+
+    public function testReplaceObject()
+    {
+        $objectOne = new \stdClass();
+        $objectOne->bar = 1;
+
+        $objectTwo = new \stdClass();
+        $objectTwo->bar = 1337;
+
+        $container = new Container(['object' => $objectOne]);
+        $container->extend('object', function() use($objectTwo){
+            return $objectTwo;
+        });
+
+        $this->assertSame($objectTwo, $container->get('object'));
     }
 }

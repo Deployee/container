@@ -68,10 +68,10 @@ class Container implements ContainerInterface
      */
     public function extend(string $id, callable $callable)
     {
-        $me = $this;
-        $value = $me->get($id);
-        $this->container[$id] = function() use($callable, $me, $value){
-            return $callable($value, $me);
-        };
+        $value = $this->get($id);
+        $this->container->offsetUnset($id);
+        $this->set($id, function(ContainerInterface $container) use ($value, $callable){
+            return $callable($value, $container);
+        });
     }
 }
